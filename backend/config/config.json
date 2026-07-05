@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "nuvnunxsiujzos",
-    "password": "fa3aab2f45529f4f42dd8bf87f470d17e401aa21e75f9d2f913f676f40f90194",
-    "database": "d8hr4khtn6esmn",
-    "host": "ec2-52-73-155-171.compute-1.amazonaws.com",
+    "username": "YOUR_DB_USER",
+    "password": "YOUR_DB_PASSWORD",
+    "database": "YOUR_DB_NAME",
+    "host": "YOUR_DB_HOST",
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
@@ -20,10 +20,10 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "nuvnunxsiujzos",
-    "password": "fa3aab2f45529f4f42dd8bf87f470d17e401aa21e75f9d2f913f676f40f90194",
-    "database": "d8hr4khtn6esmn",
-    "host": "ec2-52-73-155-171.compute-1.amazonaws.com",
+    "username": "YOUR_DB_USER",
+    "password": "YOUR_DB_PASSWORD",
+    "database": "YOUR_DB_NAME",
+    "host": "YOUR_DB_HOST",
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
