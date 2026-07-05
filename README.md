@@ -38,6 +38,14 @@ The eggs use AR.js barcode markers in matrix mode (`detectionMode: mono_and_matr
 
 When a marker comes into view, its egg loads at 30% opacity, a translucent preview traversed onto every mesh in the model. The client then checks the egg's state on the server. If the egg is unclaimed, the mesh snaps to full opacity, a discovery sound plays, and after a beat it animates away to mark the catch.
 
+```mermaid
+flowchart TD
+  V[Marker in view] --> G[Egg loads at 30% opacity]
+  G --> C{Claimed on server?}
+  C -->|no| S[Full opacity, sound, animate away]
+  C -->|yes| K[Stays a ghost]
+```
+
 ## Tech stack
 
 - Frontend: A-Frame 1.3, AR.js (barcode/matrix markers), socket.io-client, Webpack
