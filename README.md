@@ -4,7 +4,7 @@ Compete to find AR Easter eggs and watch the game live from the digital twin.
 
 ## Why I built it
 
-This was a 2022 project from my BSc in Product Design. I wanted a campus Easter egg hunt that worked on the phone people already carry, with no app install. Hunters walk the campus and scan printed markers to reveal hidden 3D eggs in augmented reality. Anyone else can point their phone at one shared marker and see a scale model of the whole campus, with pins that disappear as eggs get claimed. So the hunt has two roles at once: you play it on the ground, or you watch it from above.
+This was a 2022 project from my BSc in Product Design. I wanted a campus Easter egg hunt that ran on the phone people already carry, with no app to install. Hunters walk the campus and scan printed markers to reveal hidden 3D eggs in AR. Everyone else can point a phone at one shared marker and get a scale model of the whole campus, its pins winking out as eggs get claimed. Two roles, one game: play it on the ground, or watch it from above.
 
 ## What it does
 
@@ -17,7 +17,7 @@ This was a 2022 project from my BSc in Product Design. I wanted a campus Easter 
 
 ## How it works
 
-The frontend is A-Frame with AR.js. The backend is Express with socket.io, and Sequelize over Postgres holds the egg (`trigger`) and `team` state. Every phone in the game talks to the same socket server, which is what keeps the hunters and the digital twin in sync.
+The frontend is A-Frame with AR.js. The backend is Express with socket.io, and Sequelize over Postgres holds the egg (`trigger`) and `team` state. Every phone talks to the same socket server. That shared server keeps hunters and the twin in sync.
 
 ```mermaid
 flowchart LR
@@ -32,7 +32,7 @@ flowchart LR
 
 ### Marker handling and shared state
 
-The eggs use AR.js barcode markers in matrix mode (`detectionMode: mono_and_matrix`, `matrixCodeType: 3x3`), so each egg is a cheap printed 3x3 code rather than a trained image target, and one more code (value 63) stands in for the campus twin. When AR.js fires `markerFound`, the client fades the egg model in optimistically, then emits `eggStatus` over socket.io to ask whether that egg's row is already `taken`. Only if it is not does it play the discovery sound, animate the egg away, and emit `updateEgg` to flip the row in Postgres. Meanwhile the server broadcasts the full egg roster on `eggOverview` once a second, and the twin client hides each pin whose egg has been claimed, so a spectator sees captures land within about a second of them happening.
+The eggs use AR.js barcode markers in matrix mode (`detectionMode: mono_and_matrix`, `matrixCodeType: 3x3`). Each egg is a cheap printed 3x3 code, lighter to detect than a trained image target. One more code (value 63) stands in for the campus twin. When AR.js fires `markerFound`, the client fades the egg model in right away, then emits `eggStatus` over socket.io to check whether that egg's row is already `taken`. If it is free, it plays the discovery sound, animates the egg away, and emits `updateEgg` to flip the row in Postgres. The server also broadcasts the full egg roster on `eggOverview` once a second. The twin client hides each pin whose egg has been claimed, so a spectator sees a capture land within about a second.
 
 ## Tech stack
 
@@ -65,8 +65,8 @@ npm install
 npm start         # runs ./bin/www
 ```
 
-The backend expects a Postgres database configured in `backend/config/config.json`, then the Sequelize migrations and seeders under `backend/migrations` and `backend/seeders`. Two things to know if you clone this: the client's socket endpoint is hardcoded to the original Heroku backend, which is no longer running, so point it at your own server, and the egg and campus GLTF assets are loaded from a Glitch CDN.
+The backend expects a Postgres database configured in `backend/config/config.json`. Run the Sequelize migrations and seeders under `backend/migrations` and `backend/seeders` to set it up. One thing to know if you clone this: the client's socket endpoint is hardcoded to the original Heroku backend, which is offline now, so repoint it at your own server. The egg and campus GLTF assets load from a Glitch CDN.
 
 ## Status
 
-Prototype from 2022, consolidated from the former `eggFront` and `eggBack` repos with history preserved. It is a proof of the two-role idea (play on the ground, watch from the twin) rather than a finished product.
+Prototype from 2022. It proves the two-role idea (play on the ground, watch from the twin), and it never went past that.
