@@ -17,7 +17,7 @@ This was a 2022 project from my BSc in Product Design. I wanted a campus Easter 
 
 ## How it works
 
-The frontend is A-Frame with AR.js. The backend is Express with socket.io, and Sequelize over Postgres holds the egg (`trigger`) and `team` state. Every phone talks to the same socket server. That shared server keeps hunters and the twin in sync.
+The frontend is A-Frame with AR.js. The backend is Express with socket.io, and Sequelize over Postgres holds the egg (`trigger`) and `team` state. Every phone talks to the same socket server, which keeps hunters and the twin in sync.
 
 ```mermaid
 flowchart LR
@@ -32,7 +32,11 @@ flowchart LR
 
 ### Marker handling and shared state
 
-The eggs use AR.js barcode markers in matrix mode (`detectionMode: mono_and_matrix`, `matrixCodeType: 3x3`). Each egg is a cheap printed 3x3 code, lighter to detect than a trained image target. One more code (value 63) stands in for the campus twin. When AR.js fires `markerFound`, the client fades the egg model in right away, then emits `eggStatus` over socket.io to check whether that egg's row is already `taken`. If it is free, it plays the discovery sound, animates the egg away, and emits `updateEgg` to flip the row in Postgres. The server also broadcasts the full egg roster on `eggOverview` once a second. The twin client hides each pin whose egg has been claimed, so a spectator sees a capture land within about a second.
+The eggs use AR.js barcode markers in matrix mode (`detectionMode: mono_and_matrix`, `matrixCodeType: 3x3`). Each egg is a cheap printed 3x3 code. One more code (value 63) stands in for the campus twin. When AR.js fires `markerFound`, the client fades the egg model in right away, then emits `eggStatus` over socket.io to check whether that egg's row is already `taken`. If it is free, it plays the discovery sound, animates the egg away, and emits `updateEgg` to flip the row in Postgres. The server also broadcasts the full egg roster on `eggOverview` once a second. The twin client hides each pin whose egg has been claimed, so a spectator sees a capture land within about a second.
+
+### The egg shows up as a ghost
+
+When a marker comes into view, its egg loads at 30% opacity, a translucent preview traversed onto every mesh in the model. The client then checks the egg's state on the server. If the egg is unclaimed, the mesh snaps to full opacity, a discovery sound plays, and after a beat it animates away to mark the catch.
 
 ## Tech stack
 
