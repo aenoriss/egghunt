@@ -4,7 +4,7 @@ Compete to find AR Easter eggs and watch the game live from the digital twin.
 
 ## Why I built it
 
-This was a 2022 project from my BSc in Product Design. I wanted a campus Easter egg hunt that ran on the phone people already carry, with no app to install. Hunters walk the campus and scan printed markers to reveal hidden 3D eggs in AR. Everyone else can point a phone at one shared marker and get a scale model of the whole campus, its pins winking out as eggs get claimed. Two roles, one game: play it on the ground, or watch it from above.
+A 2022 project from my BSc in Product Design. I wanted a campus Easter egg hunt that ran on the phone people already carry, with no app to install. Hunters walk the campus and scan printed markers to reveal hidden 3D eggs in AR. Everyone else can point a phone at one shared marker and get a scale model of the whole campus, its pins winking out as eggs get claimed. Two roles, one game: play it on the ground, or watch it from above.
 
 ## What it does
 
@@ -37,6 +37,10 @@ The eggs use AR.js barcode markers in matrix mode (`detectionMode: mono_and_matr
 ### The egg shows up as a ghost
 
 When a marker comes into view, its egg loads at 30% opacity, a translucent preview traversed onto every mesh in the model. The client then checks the egg's state on the server. If the egg is unclaimed, the mesh snaps to full opacity, a discovery sound plays, and after a beat it animates away to mark the catch. An egg that is already taken stays at low opacity, a ghost you cannot pick up.
+
+### The campus model
+
+The overhead campus model came out of Google Earth. There was no clean way to export its geometry at the time, so I pulled it from the graphics buffer. I captured a frame of the campus in Google Earth with RenderDoc, a graphics debugger that dumps the GPU draw calls, geometry, and textures. Then I rebuilt the meshes and textures from that capture with the MapsModelsImporter add-on for Blender, and cleaned it up for the scene.
 
 ## Tech stack
 
