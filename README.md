@@ -1,3 +1,5 @@
+<img src="assets/header.webp" alt="egghunt" width="100%">
+
 # Egghunt
 
 Compete to find AR Easter eggs and watch the game live from the digital twin.
